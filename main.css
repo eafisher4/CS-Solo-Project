@@ -1,0 +1,15 @@
+div#flavorComponent {
+  display: flex;
+  background-color: green;
+  width: 300px;
+}
+
+div#flavorComponent > p > span {
+  font-weight: bold;
+  padding-left: 15px;
+}
+
+div#flavorComponent > button {
+  padding: 0 15;
+  margin-left: 15px;
+}
