@@ -4,9 +4,8 @@ module.exports = {
   getRatings: (req, res) => {
     RatingsData.find({}, (err, data) => {
       if (err) {
-        console.log(err);
+        return res.send(err);
       }
-      console.log(data);
       return res.send(data);
     });
   },
@@ -19,6 +18,11 @@ module.exports = {
     });
   },
   searchActivityRating: (req, res) => {
-
-  }
-}
+    RatingsData.find({}, (err, data) => {
+      if (err) {
+        return res.send(err);
+      }
+      return res.send(data);
+    });
+  },
+};

@@ -13,12 +13,14 @@ class App extends Component {
       newRating: '',
       newActivity: '',
       newActivities: [],
-      averageRating: 'N/A',
+      searchActivity: ['', ''],
     };
     this.createDayRating = this.createDayRating.bind(this);
     this.updateRating = this.updateRating.bind(this);
     this.submitNewActivity = this.submitNewActivity.bind(this);
     this.updateNewActivity = this.updateNewActivity.bind(this);
+    this.searchRatingForActivity = this.searchRatingForActivity.bind(this);
+    this.updateActivityToSearch = this.updateActivityToSearch.bind(this);
   }
 
   componentDidMount() {
@@ -55,10 +57,28 @@ class App extends Component {
     this.setState({ ...this.state, newActivities: newActivitiesCopy });
   }
 
+  searchRatingForActivity() {
+    const { searchActivity } = this.state;
+    const ratingsArr = [];
+    const searchTerm = searchActivity[0];
+    fetch('/searchActivity', {
+    }).then((data) => {
+      return data.json(); 
+    }).then((newData) => {
+      newData.forEach((day) => {
+        day.activities.includes(searchActivity[0]) ? ratingsArr.push(day.rating): null;
+      });
+      const avgOfRatingsArr = ratingsArr.reduce((a,b) => a + b)/ratingsArr.length;
+      const newSearchArr = [searchTerm, avgOfRatingsArr.toFixed(2)];
+      this.setState({ ...this.state, searchActivity: newSearchArr })
+      console.log(this.state)
+    });
+
+  }
+
   updateRating(event) {
     const userInputRating = event.target.value;
     this.setState({ ...this.state, newRating: userInputRating });
-    console.log(this.state);
   }
   
   updateNewActivity(event) {
@@ -66,18 +86,21 @@ class App extends Component {
     this.setState({ ...this.state, newActivity: userInputActivity });
   }
 
-
-  // searchRatingForActivity(activity) {
-
-  // }
+  updateActivityToSearch(event) {
+    const newSearch = this.state.searchActivity.slice();
+    const userInputSearchActivity = event.target.value;
+    newSearch[0] = userInputSearchActivity;
+    this.setState({ ...this.state, searchActivity: newSearch });
+    console.log(this.state);
+  }
 
   render() {
-
-    const { ratings, averageRating, newRating, newActivities } = this.state;
+    const { searchActivity, ratings, averageRating, newRating, newActivities } = this.state;
     return (   
       <div>
         <DisplayAverageComponent ratings={ratings} averageRating={averageRating} />
         <CreateRatingComponent value={newRating} newActivities={newActivities} submitNewActivity={this.submitNewActivity} updateNewActivity={this.updateNewActivity} updateRating={this.updateRating} createDayRating={this.createDayRating} />
+        <SearchActivityComponent searchActivity={searchActivity} updateActivityToSearch={this.updateActivityToSearch} searchRatingForActivity={this.searchRatingForActivity}/>
       </div>
     )
   }
