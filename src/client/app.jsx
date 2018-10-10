@@ -13,6 +13,7 @@ class App extends Component {
       newRating: '',
       newActivity: '',
       newActivities: [],
+      allActivities: [],
       searchActivity: ['', ''],
     };
     this.createDayRating = this.createDayRating.bind(this);
@@ -21,20 +22,26 @@ class App extends Component {
     this.updateNewActivity = this.updateNewActivity.bind(this);
     this.searchRatingForActivity = this.searchRatingForActivity.bind(this);
     this.updateActivityToSearch = this.updateActivityToSearch.bind(this);
+    this.checkActivity = this.checkActivity.bind(this);
   }
 
   componentDidMount() {
     const updatedRatings = [];
+    const updatedActivities = this.state.allActivities.slice();
     fetch('/ratings', {
     }).then((data) => {
-      return data.json(); 
+      return data.json();
     }).then((newData) => {
       newData.forEach((day) => {
-        updatedRatings.push(day.rating)
+        updatedRatings.push(day.rating);
+        day.activities.forEach((activity) => {
+          if(!updatedActivities.includes(activity)) {
+            updatedActivities.push(activity)
+          }
+        });
       });
-      console.log(updatedRatings);
-      this.setState({ ...this.state, ratings: updatedRatings })
-    });
+      this.setState({ ...this.state, ratings: updatedRatings, allActivities: updatedActivities });
+    })
   }
 
   createDayRating() {
@@ -47,7 +54,7 @@ class App extends Component {
       method: 'POST',
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: JSON.stringify(newDayRating),
-    }).then(response => console.log(response.json()));
+    }).then(response => response.json());
   }
 
   submitNewActivity() {
@@ -68,12 +75,11 @@ class App extends Component {
       newData.forEach((day) => {
         day.activities.includes(searchActivity[0]) ? ratingsArr.push(day.rating): null;
       });
-      const avgOfRatingsArr = ratingsArr.reduce((a,b) => a + b)/ratingsArr.length;
+      const avgOfRatingsArr = ratingsArr.reduce((a, b) => a + b) / ratingsArr.length;
       const newSearchArr = [searchTerm, avgOfRatingsArr.toFixed(2)];
       this.setState({ ...this.state, searchActivity: newSearchArr })
-      console.log(this.state)
+      console.log(this.state);
     });
-
   }
 
   updateRating(event) {
@@ -86,6 +92,10 @@ class App extends Component {
     this.setState({ ...this.state, newActivity: userInputActivity });
   }
 
+  checkActivity(event) {
+    console.log("test")
+  }
+
   updateActivityToSearch(event) {
     const newSearch = this.state.searchActivity.slice();
     const userInputSearchActivity = event.target.value;
@@ -95,11 +105,12 @@ class App extends Component {
   }
 
   render() {
-    const { searchActivity, ratings, averageRating, newRating, newActivities } = this.state;
+
+    const { checkActivity, allActivities, searchActivity, ratings, averageRating, newRating, newActivities } = this.state;
     return (   
       <div>
         <DisplayAverageComponent ratings={ratings} averageRating={averageRating} />
-        <CreateRatingComponent value={newRating} newActivities={newActivities} submitNewActivity={this.submitNewActivity} updateNewActivity={this.updateNewActivity} updateRating={this.updateRating} createDayRating={this.createDayRating} />
+        <CreateRatingComponent checkActivity={checkActivity} allActivities={allActivities} value={newRating} newActivities={newActivities} submitNewActivity={this.submitNewActivity} updateNewActivity={this.updateNewActivity} updateRating={this.updateRating} createDayRating={this.createDayRating} />
         <SearchActivityComponent searchActivity={searchActivity} updateActivityToSearch={this.updateActivityToSearch} searchRatingForActivity={this.searchRatingForActivity}/>
       </div>
     )

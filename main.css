@@ -13,3 +13,7 @@ div#flavorComponent > button {
   padding: 0 15;
   margin-left: 15px;
 }
+
+.activityList {
+  list-style-type: none;
+}
