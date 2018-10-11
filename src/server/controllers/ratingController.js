@@ -12,7 +12,7 @@ module.exports = {
   addRating: (req, res) => {
     RatingsData.create(req.body, (err, newDoc) => {
       if (err) {
-        res.setStatus(400).send(err);
+        res.status(400).send(err);
       }
       res.json(newDoc);
     });

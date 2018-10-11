@@ -1,19 +1,50 @@
-div#flavorComponent {
-  display: flex;
-  background-color: green;
-  width: 300px;
-}
-
-div#flavorComponent > p > span {
-  font-weight: bold;
-  padding-left: 15px;
-}
-
-div#flavorComponent > button {
-  padding: 0 15;
-  margin-left: 15px;
-}
 
 .activityList {
   list-style-type: none;
+}
+
+.listItem-Container {
+  list-style-type: none;
+  height: 150px;
+  overflow: scroll;
+  width: 150px;
+  padding-left: 0px;
+}
+
+.activityList-Container {
+  list-style-type: none;
+  height: 150px;
+  overflow: scroll;
+  width: 150px;
+  padding-left: 0px;
+}
+
+.components {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: white;
+  opacity: .9;
+  width: 900px;
+  padding-left: 10px;
+}
+
+h3 {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+h4 {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  font-family: Arial;
+  background: url('./GNP2.jpeg');
+  background-repeat: round;
+
 }
